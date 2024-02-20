@@ -5,7 +5,8 @@ public class Main {
         DatabaseControl DB = new DatabaseControl();
         //DB.insertRecord(230655, "Medeu", 18, "Software Engineer");
         DB.selectAll();
-        DB.updateStudent(23065);
+        DB.deleteStudent(23065);
+        DB.selectAll();
         DB.Close();
     }
 }

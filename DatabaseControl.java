@@ -2,9 +2,9 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class DatabaseControl {
-    static final String URL = "jdbc:postgresql://localhost:5432/StudentsDB";
-    static final String USERNAME = "postgres";
-    static final String PASSWORD = "Vladislave";
+    static final String URL = "jdbc:postgresql://ep-patient-pond-a240rs3p.eu-central-1.aws.neon.tech/AITUstudents?sslmode=require";
+    static final String USERNAME = "AmadeoMartell";
+    static final String PASSWORD = "nJ2w6aCUZhkM";
     private Connection conn;
 
     public DatabaseControl() {
@@ -115,5 +115,21 @@ public class DatabaseControl {
             System.out.println("Update error: " + ex.getMessage());
         }
     }
+    public void deleteStudent(Integer id) {
+        String SQL = "DELETE FROM studentdb WHERE id = ?";
 
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.setInt(1, id);
+
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("Student with ID " + id + " was deleted successfully.");
+            } else {
+                System.out.println("No record found with ID " + id);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Deletion error: " + ex.getMessage());
+        }
+    }
 }
