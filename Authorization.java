@@ -60,7 +60,7 @@ public class Authorization extends JFrame implements ActionListener {
         if (e.getSource() == button) {
             String login = login_textField.getText();
             String password = new String(password_textField.getPassword());
-            if (login.equals("admin") && password.equals("admin")) {
+            if (login.equals(DatabaseControl.USERNAME) && password.equals(DatabaseControl.PASSWORD)) {
                 {
                     DB_PAGE DB = new DB_PAGE();
                     frame.dispose();

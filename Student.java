@@ -20,6 +20,16 @@ public class Student {
         this.major = major;
     }
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", major='" + major + '\'' +
+                '}';
+    }
+
     public Integer getId() {
         return id;
     }
@@ -42,4 +52,6 @@ public class Student {
         this.age = age;
         this.major = major;
     }
+
+
 }

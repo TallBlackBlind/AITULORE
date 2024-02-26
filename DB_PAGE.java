@@ -3,9 +3,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 public class DB_PAGE extends JFrame {
     JPanel parametersPanel;
@@ -193,21 +191,21 @@ public class DB_PAGE extends JFrame {
         updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!nameField.getText().equals("")){
+                if (!nameField.getText().isEmpty()){
                     try {
                         databaseControl.updateStudentField(idField.getText(), "name", nameField.getText());
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Error", "eRROR", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-                if (!ageField.getText().equals("")){
+                if (!ageField.getText().isEmpty()){
                     try {
                         databaseControl.updateStudentField(idField.getText(), "age", ageField.getText());
                     } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "error", "error?", JOptionPane.ERROR_MESSAGE);
                 }
                 }
-                if (!majorField.getText().equals("")){
+                if (!majorField.getText().isEmpty()){
                     try{
                     databaseControl.updateStudentField(idField.getText(),"major",majorField.getText());
                     } catch (Exception ex) {
@@ -225,10 +223,8 @@ public class DB_PAGE extends JFrame {
         selectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                databaseControl.searchStudent(idField.getText());
+                JOptionPane.showMessageDialog(null, databaseControl.searchStudent(idField.getText()), "Output", JOptionPane.INFORMATION_MESSAGE);
             }
         });
     }
 }
-
-

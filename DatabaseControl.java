@@ -107,18 +107,16 @@ public class DatabaseControl {
         }
     }
     public String searchStudent(String id){
-        String SQL = "SELECT * FROM studentdb WHERE id = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
-            pstmt.setInt(1,  Integer.parseInt(id));
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows > 0) {
-                System.out.println("Student with ID " + id + " was deleted successfully.");
-            } else {
-                System.out.println("No record found with ID " + id);
+        String SQL = "SELECT * FROM studentdb WHERE id = " + id;
+        Student student = new Student(404, "error", 0, "ERROR");
+        try (Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL)) {
+            while (rs.next()) {
+                student = new Student(rs.getInt("id"), rs.getString("name"), rs.getInt("age"), rs.getString("major"));
             }
         } catch (SQLException ex) {
-            System.out.println("Deletion error: " + ex.getMessage());
+            System.out.println(ex.getMessage());
         }
-        return "ok";
+        return student.toString();
     }
 }
