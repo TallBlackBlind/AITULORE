@@ -32,6 +32,10 @@ public class DB_PAGE extends JFrame {
         JFrame frame = new JFrame();
         databaseControl = new DatabaseControl();
 
+        Image image = new ImageIcon("aitu-logo_.png").getImage();
+        frame.setIconImage(image);
+
+
         parametersPanel = new JPanel();
         parametersPanel.setBackground(new Color(0xD4E7C5));
         parametersPanel.setBounds(10, 10, 200, 300);

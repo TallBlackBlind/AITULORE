@@ -14,6 +14,10 @@ public class Authorization extends JFrame implements ActionListener {
     public Authorization() {
         frame = new JFrame();
 
+        Image image = new ImageIcon("aitu-logo_.png").getImage();
+        frame.setIconImage(image);
+
+
         panel = new JPanel();
         panel.setBackground(Color.lightGray);
         panel.setBounds(75, 80, 250, 250);
