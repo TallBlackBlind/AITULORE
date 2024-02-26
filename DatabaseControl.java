@@ -1,4 +1,6 @@
+import java.awt.*;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DatabaseControl {
@@ -28,26 +30,29 @@ public class DatabaseControl {
         return conn;
     }
 
-    public void selectAll() {
+    public ArrayList selectAll() {
         String SQL = "SELECT * FROM studentdb";
+        ArrayList<Student> students = new ArrayList<>();
         try (Statement stmt = conn.createStatement();
+
              ResultSet rs = stmt.executeQuery(SQL)) {
             while (rs.next()) {
-                System.out.println(rs.getInt("id") + "\t" + rs.getString("name") + "\t" + rs.getInt("age") +
-                        "\t" + rs.getString("major"));
+                students.add(new Student(rs.getInt("id"), rs.getString("name"), rs.getInt("age"), rs.getString("major")));
             }
+
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+        return  students;
     }
 
-    public void insertRecord(Integer value1, String value2 , Integer value3, String value4) {
+    public void insertRecord(String value1, String value2 , String value3, String value4) {
         String SQL = "INSERT INTO studentdb(id, name, age, major) VALUES(?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
-            pstmt.setInt(1, value1);
+            pstmt.setInt(1, Integer.parseInt(value1));
             pstmt.setString(2, value2);
-            pstmt.setInt(3, value3);
+            pstmt.setInt(3, Integer.parseInt(value3));
             pstmt.setString(4, value4);
 
             int affectedRows = pstmt.executeUpdate();
@@ -60,40 +65,9 @@ public class DatabaseControl {
         }
     }
 
-    public void updateStudent(Integer id){
-        String SQL = "SELECT * FROM studentdb WHERE id=" + id;
-        try(Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(SQL)){
-            rs.next();
-            Scanner sc = new Scanner(System.in);
-            System.out.println(rs);
-            boolean state = true;
-            while(state){
-                System.out.println("Choose what column you need to change: Name, Age, Major");
-                System.out.println("Q for quit");
-                String choose = sc.next();
-                System.out.println("Current information: " + rs.getInt("id") + "\t" + rs.getString("name") + "\t" + rs.getInt("age") + "\t" + rs.getString("major"));
-                switch (choose){
-                    case "Name" -> {
-                        updateStudentField(id, "name", sc.next());
-                    }
-                    case "Age" -> {
-                        updateStudentField(id, "age", sc.next());
-                    }
-                    case "Major" -> {
-                        updateStudentField(id, "major", sc.next());
-                    }
-                    case "Q" -> {
-                        state = false;
-                    }
-                    default -> System.out.println("WRONG INPUT! ");
-                }
-            }
-        }
-        catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-    }
-    private void updateStudentField(Integer id, String field, String newValue) {
+
+
+    public void updateStudentField(String id, String field, String newValue) {
         String SQL = "UPDATE studentdb SET " + field + " = ? WHERE id = ?";
 
         try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
@@ -102,7 +76,7 @@ public class DatabaseControl {
             } else {
                 pstmt.setString(1, newValue);
             }
-            pstmt.setInt(2, id);
+            pstmt.setInt(2,Integer.parseInt(id));
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -115,11 +89,11 @@ public class DatabaseControl {
             System.out.println("Update error: " + ex.getMessage());
         }
     }
-    public void deleteStudent(Integer id) {
-        String SQL = "DELETE FROM studentdb WHERE id = ?";
+    public void deleteStudent(String id) {
+        String SQL = "DELETE FROM studentdb WHERE id = ? ";
 
         try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, Integer.parseInt(id));
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -131,5 +105,20 @@ public class DatabaseControl {
         } catch (SQLException ex) {
             System.out.println("Deletion error: " + ex.getMessage());
         }
+    }
+    public String searchStudent(String id){
+        String SQL = "SELECT * FROM studentdb WHERE id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(SQL)) {
+            pstmt.setInt(1,  Integer.parseInt(id));
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Student with ID " + id + " was deleted successfully.");
+            } else {
+                System.out.println("No record found with ID " + id);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Deletion error: " + ex.getMessage());
+        }
+        return "ok";
     }
 }

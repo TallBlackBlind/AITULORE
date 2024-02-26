@@ -52,6 +52,7 @@ public class Authorization extends JFrame implements ActionListener {
         panel.add(button);
         panel.add(login_textField);
         panel.add(password_textField);
+
     }
 
     @Override
