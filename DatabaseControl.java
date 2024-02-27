@@ -5,9 +5,21 @@ import java.util.Scanner;
 
 public class DatabaseControl {
     static final String URL = "jdbc:postgresql://ep-patient-pond-a240rs3p.eu-central-1.aws.neon.tech/AITUstudents?sslmode=require";
-    static String USERNAME = "AmadeoMartell";
-    static String PASSWORD = "nJ2w6aCUZhkM";
+    static String USERNAME;
+    static String PASSWORD;
     private Connection conn;
+
+    public static boolean tryToConnect(String user, String pass){
+        USERNAME = user;
+        PASSWORD = pass;
+        try {
+            Connection connectTry = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connectTry.close();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 
     public DatabaseControl() {
         try {
