@@ -197,10 +197,10 @@ public class DB_PAGE extends JFrame {
 
                 studentTable.setRowCount(0);
 
-                // Fetch the latest data
+
                 ArrayList<Student> students = databaseControl.selectAll();
 
-                // Repopulate the table model
+
                 for(Student student : students) {
                     studentTable.addRow(new Object[]{student.getId(), student.getName(), student.getAge(), student.getMajor()});
    }
