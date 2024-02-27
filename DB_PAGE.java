@@ -3,12 +3,15 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 
 public class DB_PAGE extends JFrame {
     JPanel parametersPanel;
     JPanel fieldPanel;
     JPanel buttonPanel;
+    JPanel consolePanel;
     JPanel tablePanel;
     JLabel idText;
     JLabel nameText;
@@ -25,6 +28,7 @@ public class DB_PAGE extends JFrame {
     JButton reloadButton;
     DefaultTableModel studentTable;
     JTable table;
+    JTextArea consoleTextArea;
 
     private final DatabaseControl databaseControl;
 
@@ -50,6 +54,11 @@ public class DB_PAGE extends JFrame {
         buttonPanel.setBackground(new Color(0xE1F0DA));
         buttonPanel.setBounds(10, 300, 390, 200);
         buttonPanel.setLayout(null);
+
+        consolePanel = new JPanel();
+        consolePanel.setBackground(Color.black);
+        consolePanel.setBounds(10, 500, 380, 208);
+        consolePanel.setLayout(null);
 
         tablePanel = new JPanel();
         tablePanel.setBackground(new Color(0x99BC85));
@@ -116,6 +125,18 @@ public class DB_PAGE extends JFrame {
         reloadButton.setFocusable(false);
         reloadButton.setFont(new Font("Consolas", Font.PLAIN, 15));
 
+        consoleTextArea = new JTextArea();
+        consoleTextArea.setBounds(10, 10, 360, 188);
+        consoleTextArea.setEditable(false);
+        consoleTextArea.setBackground(Color.BLACK);
+        consoleTextArea.setForeground(Color.WHITE);
+        consoleTextArea.setFont(new Font("Consolas", Font.PLAIN, 12));
+        JScrollPane consoleScrollPane = new JScrollPane(consoleTextArea);
+        consoleScrollPane.setBounds(10, 10, 360, 188);
+        consolePanel.add(consoleScrollPane);
+        redirectSystemStreams();
+
+
         ArrayList<Student> students = databaseControl.selectAll();
         String[] columnNames = {"Roll", "Names", "Age", "Major"};
 
@@ -148,6 +169,7 @@ public class DB_PAGE extends JFrame {
         frame.add(fieldPanel);
         frame.add(buttonPanel);
         frame.add(tablePanel);
+        frame.add(consolePanel);
 
         parametersPanel.add(idText);
         parametersPanel.add(nameText);
@@ -230,5 +252,17 @@ public class DB_PAGE extends JFrame {
                 JOptionPane.showMessageDialog(null, databaseControl.searchStudent(idField.getText()), "Output", JOptionPane.INFORMATION_MESSAGE);
             }
         });
+    }
+    private void redirectSystemStreams() {
+        PrintStream printStream = new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) {
+                consoleTextArea.append(String.valueOf((char) b));
+                consoleTextArea.setCaretPosition(consoleTextArea.getDocument().getLength());
+            }
+        });
+
+        System.setOut(printStream);
+        System.setErr(printStream);
     }
 }
